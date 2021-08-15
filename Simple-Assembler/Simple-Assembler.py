@@ -186,10 +186,10 @@ def output(temp_dic, var_dict, label_dict, var_val, count_line, num, to, var_pro
                 if numb>=65536 or numb<0:
                     FlagS["V"] = 1
 
-            #quitting prog if overload detected
-            if FlagS["V"] == 1:
-                print("Error ! 1 of the Registers has overloaded")
-                exit()
+            #quitting prog if overload detected   ( not consider)
+            # if FlagS["V"] == 1:
+            #      print("Error ! 1 of the Registers has overloaded")  
+            #      exit()
 
             #starting checking of type and assigning opcodes
             if 0 <= count_line <= num and var_prob == 0 and hlt_prob == 0 and lab_prob == 0:
@@ -401,4 +401,4 @@ if __name__ == "__main__":
     main()
 
 #if code doesnt reach 16 bit instruction then it usually reaches a possible error which user may have made
-# Code contributed by Harsh Vardhan Singh and Dheeraj 
+# Code contributed by Harsh Vardhan Singh and Dheeraj
