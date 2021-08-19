@@ -231,8 +231,6 @@ def output(temp_dic, var_dict, label_dict, var_val, count_line, num, to, var_pro
                                                                 Register_values[a] = Register_values[c] - Register_values[e]
                                                             if (temp_dic[count_line][0] == "xor"):
                                                                 Register_values[a] = Register_values[c] ^ Register_values[e]
-                                                            if (temp_dic[count_line][0] == "or"):
-                                                                Register_values[a] = Register_values[c] or Register_values[e]
                                                             if (temp_dic[count_line][0] == "and"):
                                                                 Register_values[a] = Register_values[c] & Register_values[e]
                                                             if (temp_dic[count_line][0] == "or"):
