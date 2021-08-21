@@ -99,6 +99,7 @@ def main():
     var_val = {}        #to store var and value
     label_dict = {}     #to store label and location
     count_line = 0      #setting pointer to 0
+    hlt_line = []
     for i in range(0, 257):
         temp_dic[i] = [None, None, None, None, None]
     while True:
@@ -134,8 +135,11 @@ def main():
                 print("Error! VAR name not defined or more than 1 defined in one line in line")
                 print(c-1)
 
+
         if temp_dic[c-1][0] == "hlt":
             hlt_no = hlt_no + 1
+            hlt_line.append(c-1)
+
         c = c - 1
 
     #finding problems with labels,variables and halt commands before checking syntax of prog
@@ -154,6 +158,7 @@ def main():
     if temp_dic[num-1][0] != "hlt":
         hlt_prob = 1
         print("Error! hlt is missing in last line or overflow has occurred")
+        print(num-1)
 
     var_prob = 0
     for i in range(0, to):
@@ -163,7 +168,8 @@ def main():
             break
     if hlt_no>1:
         hlt_prob = 1
-        print("Multiple hlt declared")
+        print("Multiple hlt declared at lines")
+        print(hlt_line)
 
     #using a func 'output' to find errors and our desired output in binary format
     output(temp_dic, var_dict, label_dict, var_val, count_line, num-1, to, var_prob, hlt_prob ,lab_prob)
@@ -178,7 +184,7 @@ def output(temp_dic, var_dict, label_dict, var_val, count_line, num, to, var_pro
                 x = x + 1
 
             #passing if it is empty label,exception
-            if temp_dic[count_line][0] == "-":
+            if temp_dic[count_line][0] == "_":
                 x = x + 1
 
             #setting overload flags if required
