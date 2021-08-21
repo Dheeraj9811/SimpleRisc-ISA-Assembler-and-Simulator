@@ -154,7 +154,7 @@ def dump_pc_rf(count):
     print(binary(count, 8), binary(Store_resister["000"], 16), binary(Store_resister["001"], 16),
           binary(Store_resister["010"], 16), binary(Store_resister["011"], 16),
           binary(Store_resister["100"], 16), binary(Store_resister["101"], 16),
-          binary(Store_resister["110"], 16), binary(Store_resister["111"], 16))
+          binary(Store_resister["110"], 16), Store_resister["111"])
 
 def execute(Type, count, line):
     true_jump = 0
@@ -168,20 +168,20 @@ def execute(Type, count, line):
         if (temp_opcode == "00000"):  # add fn
             add(count, line)
             Store_resister["111"] = "0000000000000000"
-            overflow_check()
+            
             return true_things
 
         elif (temp_opcode == "00001"):  # subtract
             subtract(count, line)
             Store_resister["111"] = "0000000000000000"
-            overflow_check()
+            
             return true_things
 
 
         elif (temp_opcode == "00110"):  # multiplay
             multi(count, line)
             Store_resister["111"] = "0000000000000000"
-            overflow_check()
+            
             return true_things
 
         elif (temp_opcode == "00110"):  # Exclusive Or
@@ -192,7 +192,7 @@ def execute(Type, count, line):
             i = line[0][7:10]
             Store_resister[i] = b ^ c
             Store_resister["111"] = "0000000000000000"
-            overflow_check()
+        
             return true_things
 
         elif (temp_opcode == "01011"):  # or
@@ -203,7 +203,7 @@ def execute(Type, count, line):
             i = line[0][7:10]
             Store_resister[i] = b | c
             Store_resister["111"] = "0000000000000000"
-            overflow_check()
+            
             return true_things
 
         elif (temp_opcode == "01100"):  # And
@@ -214,7 +214,7 @@ def execute(Type, count, line):
             i = line[0][7:10]
             Store_resister[i] = b & c
             Store_resister["111"] = "0000000000000000"
-            overflow_check()
+            
             return true_things
 
     elif (Type == "B"):
@@ -224,21 +224,21 @@ def execute(Type, count, line):
             i = line[0][5:8]
             Store_resister[i] = binaryToDecimal(str(line[0][8:]))
             Store_resister["111"] = "0000000000000000"
-            overflow_check()
+            
             return true_things
 
         elif (temp_opcode == "01000"):  # rightshift
             i = line[0][5:8]
             Store_resister[i] = int(Store_resister[i] >> (binaryToDecimal(str(line[0][8:]))))
             Store_resister["111"] = "0000000000000000"
-            overflow_check()
+            
             return true_things
 
         elif (temp_opcode == "01001"):  # leftShift
             i = line[0][5:8]
             Store_resister[i] = int(Store_resister[i] << (binaryToDecimal(str(line[0][8:]))))
             Store_resister["111"] = "0000000000000000"
-            overflow_check()
+            
             return true_things
 
 
@@ -251,7 +251,7 @@ def execute(Type, count, line):
             i = line[0][10:13]
             Store_resister[i] = str(c)
             Store_resister["111"] = "0000000000000000"
-            overflow_check()
+            
             return true_things
 
         elif (temp_opcode == "00111"):  # divide
@@ -264,16 +264,24 @@ def execute(Type, count, line):
             Store_resister["000"] = a
             Store_resister["001"] = b
             Store_resister["111"] = "0000000000000000"
-            overflow_check()
+            
             return true_things
 
         elif (temp_opcode == "01101"):  # Inverse
             i = line[0][13:16]
             b = int(Store_resister[i])
+            temp_inv = binary(b,16)
+            inv = ""
+            for index in temp_inv:
+                if index=="0":
+                    inv = inv + "1"
+                elif index=="1":
+                    inv = inv + "0"
+            final_inv=binaryToDecimal(inv)
             i = line[0][10:13]
-            Store_resister[i] = str(~b)
+            Store_resister[i] = str(final_inv)
             Store_resister["111"] = "0000000000000000"
-            overflow_check()
+            
             return true_things
 
         elif (temp_opcode == "01110"):  # compare
@@ -300,14 +308,14 @@ def execute(Type, count, line):
             b = int(Store_resister[i])
             Store_var[line[0][8:16]] = b
             Store_resister["111"] = "0000000000000000"
-            overflow_check()
+            
             return true_things
 
         elif (temp_opcode == "00100"):    # load
             i = line[0][5:8]
             Store_resister[i] = Store_var[line[0][8:16]]
             Store_resister["111"] = "0000000000000000"
-            overflow_check()
+            
             return true_things
 
 
@@ -318,7 +326,7 @@ def execute(Type, count, line):
             true_things[1] = binaryToDecimal(address) - len(Store_var)
             true_things[0] = true_things[0] + 1
             Store_resister["111"] = "0000000000000000"
-            overflow_check()
+            
             return true_things
 
         elif (temp_opcode == "10000" and Store_resister["111"] == "0000000000000100"):  # jump if less than
@@ -326,7 +334,7 @@ def execute(Type, count, line):
             true_things[1] = binaryToDecimal(address)-len(Store_var)
             true_things[0] = true_things[0] + 1
             Store_resister["111"] = "0000000000000000"
-            overflow_check()
+            
             return true_things
 
         elif (temp_opcode == "10001" and Store_resister["111"] == "0000000000000010"):  # jump if greater than
@@ -334,7 +342,7 @@ def execute(Type, count, line):
             true_things[1] = binaryToDecimal(address)-len(Store_var)
             true_things[0] = true_things[0] + 1
             Store_resister["111"] = "0000000000000000"
-            overflow_check()
+            
             return true_things
 
         elif (temp_opcode == "10010" and Store_resister["111"] == "0000000000000001"):  # jump if equal
@@ -342,18 +350,18 @@ def execute(Type, count, line):
             true_things[1] = binaryToDecimal(address)-len(Store_var)
             true_things[0] = true_things[0] + 1
             Store_resister["111"] = "0000000000000000"
-            overflow_check()
+            
             return true_things
 
         else :
             Store_resister["111"] = "0000000000000000"
-            overflow_check()
+            
             return true_things
 
     elif (Type == "F"):
         main.hlted = True
         Store_resister["111"] = "0000000000000000"
-        overflow_check()
+        
         return true_things
 
 
@@ -400,6 +408,7 @@ def main():
         t_t = execute(Type, Pc, line)
         x_coordinate.append(Cycle) 
         y_coordinate.append(Pc)
+        overflow_check()
         dump_pc_rf(Pc)
         if t_t[0] == 0:
             Pc += 1
