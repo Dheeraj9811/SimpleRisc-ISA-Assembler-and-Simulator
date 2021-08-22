@@ -146,9 +146,8 @@ def overflow_check():
         if i !="111":
             if int(j)>65535 or int(j)<0 :
                 x = binary(j,16)
-                j = x[(len(x)-16):len(x)] 
-                Store_resister["111"]="0000000000001000"
-            
+                Store_resister[i] = binaryToDecimal(x[(len(x)-16):len(x)]) 
+                Store_resister["111"]="0000000000001000"        
 
 def dump_pc_rf(count):
     print(binary(count, 8), binary(Store_resister["000"], 16), binary(Store_resister["001"], 16),
@@ -421,7 +420,7 @@ def main():
     plt.xlabel("cycle number")
     plt.ylabel("memory address")
     #plt.show
-    plt.savefig("matplotlib.png")
+    plt.savefig("mat.png")
  
 if __name__ == "__main__":
     main()
