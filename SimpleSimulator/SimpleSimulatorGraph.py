@@ -407,6 +407,9 @@ def main():
         t_t = execute(Type, Pc, line)
         x_coordinate.append(Cycle) 
         y_coordinate.append(Pc)
+        if(line[0][0:5] == "00100" or line[0][0:5] == "00101"):
+            x_coordinate.append(Cycle) 
+            y_coordinate.append(binaryToDecimal(line[0][8:16]))
         overflow_check()
         dump_pc_rf(Pc)
         if t_t[0] == 0:
